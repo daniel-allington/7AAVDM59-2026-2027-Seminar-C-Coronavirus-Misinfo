@@ -1,0 +1,76 @@
+---
+title: "Coronavirus Misinformation"
+author: "Daniel Allington"
+date: "2026-11-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(readr)
+library(ggplot2)
+library(knitr)
+
+lul_d <- read_csv(
+  '../data/life-under-lockdown-wave2-extract.csv',
+  col_types = cols(
+    col_integer(),
+    col_factor(),
+    col_factor(
+      levels = c(
+        'Nothing at all',
+        'Not very much',
+        'A fair amount',
+        'A great deal'
+      )
+    ),
+    col_integer()
+  )
+  )
+
+```
+
+# Hypothesis
+Number of unconventional beliefs about coronavirus is associated with gender.
+
+# Descriptive statistics
+```{r}
+lul_d %>%
+  ggplot(
+    aes(
+      x = gender
+    )
+  ) +
+  geom_bar()
+```
+
+```{r}
+lul_d %>%
+  count(
+    gender
+  ) %>%
+  kable
+```
+
+```{r}
+lul_d %>%
+  ggplot(
+    aes(x = beliefs)
+  ) +
+  geom_histogram(bins = 6)
+```
+
+```{r}
+lul_d %>%
+  summarise(
+    n = n(),
+    Mdn = median(beliefs),
+    M = mean(beliefs),
+    SD = sd(beliefs)
+  ) %>%
+  kable(digits = 2)
+```
+
+
