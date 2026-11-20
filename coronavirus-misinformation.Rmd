@@ -2,7 +2,9 @@
 title: "Coronavirus Misinformation"
 author: "Daniel Allington"
 date: "2026-11-20"
-output: html_document
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -72,5 +74,30 @@ lul_d %>%
   ) %>%
   kable(digits = 2)
 ```
+
+# Findings
+```{r}
+lul_d %>%
+  group_by(gender) %>%
+  summarise(
+    n = n(),
+    Mdn = median(beliefs),
+    M = mean(beliefs),
+    SD = sd(beliefs)
+  ) %>%
+  kable(digits = 2)
+```
+
+```{r}
+lul_d %>%
+  filter(gender != 'In another way') %>%
+  t.test(
+    formula = beliefs ~ gender,
+    var.equal = FALSE,
+    data = .
+  )
+```
+
+There were not enough people who identified their gender in another way to include in the analysis. Men had more unconventional beliefs (M = 0.73, SD = 1.13) than women (M = 0.61, SD = 1.05), but this was not statistically significant, t(494.31) = 1.201, p = .230.
 
 
