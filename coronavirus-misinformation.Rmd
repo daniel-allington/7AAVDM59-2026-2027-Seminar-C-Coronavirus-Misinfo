@@ -15,6 +15,8 @@ library(readr)
 library(ggplot2)
 library(knitr)
 
+options(scipen = 999)
+
 lul_d <- read_csv(
   '../data/life-under-lockdown-wave2-extract.csv',
   col_types = cols(
@@ -35,7 +37,9 @@ lul_d <- read_csv(
 ```
 
 # Hypothesis
-Number of unconventional beliefs about coronavirus is associated with gender.
+H1 Number of unconventional beliefs about coronavirus is associated with gender.
+
+H2 Number of unconventional beliefs about coronavirus is associated with age.
 
 # Descriptive statistics
 ```{r}
@@ -99,5 +103,27 @@ lul_d %>%
 ```
 
 There were not enough people who identified their gender in another way to include in the analysis. Men had more unconventional beliefs (M = 0.73, SD = 1.13) than women (M = 0.61, SD = 1.05), but this was not statistically significant, t(494.31) = 1.201, p = .230.
+
+```{r}
+lul_d %>%
+  ggplot(
+    aes(
+      x = age,
+      y = beliefs
+    )
+  ) +
+  geom_point()
+```
+
+```{r}
+lul_d %>%
+  cor.test(
+    formula = ~ age + beliefs,
+    method = 'pearson',
+    data = .
+  )
+```
+
+Age was found to be negatively associated with number of unconventional beliefs, r(498) = -.24, p < .001 95% CI [-.32, -.16].
 
 
